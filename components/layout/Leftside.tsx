@@ -41,7 +41,7 @@ const Leftside = () => {
         </SignedOut>
 
         <SignedIn>
-          <div className="flex items-center gap-4 text-xl text-gray-900">
+          <div className="flex items-center gap-2 text-md text-gray-900">
             <UserButton />
             <p>Manage Profile</p>
           </div>
