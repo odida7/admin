@@ -20,6 +20,8 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "../custom ui/ImageUpload";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import Loader from "../custom ui/Loader";
+import Delete from "../custom ui/Delete";
 
 const formSchema = z.object({
   title: z.string().min(2).max(20),
@@ -27,41 +29,69 @@ const formSchema = z.object({
   image: z.string(),
 });
 
-const CategoryForm = () => {
+interface CategoryProps {
+  initialData?: CategoryType | null;
+}
+
+const CategoryForm: React.FC<CategoryProps> = ({ initialData }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      image: "",
-    },
+    defaultValues: initialData
+      ? initialData
+      : {
+          title: "",
+          description: "",
+          image: "",
+        },
   });
 
+  const handleKey = (event: React.KeyboardEvent<HTMLInputElement>| React.KeyboardEvent<HTMLAreaElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  }
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
-      const res = await fetch("/api/category", {
+      const url = initialData
+        ? `/api/category/${initialData._id}`
+        : "/api/category";
+      const res = await fetch(url, {
         method: "POST",
         body: JSON.stringify(values),
       });
       if (res.ok) {
         setLoading(false);
-        toast.success('Category created successfully')
+        toast.success(`Category ${initialData ? "Updated" : "created"}`);
+        window.location.href = "/categories";
         router.push("/categories");
       }
     } catch (err) {
       console.log("[category Post]", err);
-      toast.error('Failed to create Category')
-
+      toast.error("Failed to create Category");
     }
   };
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <div className="p-10">
-      <h1 className="text-4xl text-gray-500 font-semibold">Create Category</h1>
+      {initialData ? (
+        <div className="flex flex-row items-center justify-between">
+          <h1 className="text-4xl text-gray-500 font-semibold">
+            Edit Category
+          </h1>
+
+          <Delete id={initialData._id}/>
+        </div>
+      ) : (
+        <h1 className="text-4xl text-gray-500 font-semibold">
+          Create Category
+        </h1>
+      )}
 
       <Separator className="bg-gray-400 mt-4 mb-7" />
 
@@ -74,7 +104,7 @@ const CategoryForm = () => {
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="Title" {...field} />
+                  <Input placeholder="Title" {...field} onKeyDown={handleKey}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -88,7 +118,7 @@ const CategoryForm = () => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="description" {...field} rows={5} />
+                  <Textarea placeholder="description" {...field} rows={5} onKeyDown={handleKey} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
