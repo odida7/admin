@@ -15,7 +15,7 @@ import {
 import toast from "react-hot-toast";
 
 interface DeleteProps {
-  id: string;
+  id: string;  
 }
 
 const Delete:React.FC<DeleteProps> = ({id}) => {
@@ -43,7 +43,7 @@ const Delete:React.FC<DeleteProps> = ({id}) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <Button className="bg-red-500 text-white">
+        <Button type="button" className="bg-red-500 text-white">
           <Trash className="h-4 w-4" />
         </Button>
       </AlertDialogTrigger>

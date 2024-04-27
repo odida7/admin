@@ -16,7 +16,7 @@ const categorySchema = new mongoose.Schema({
         ref: 'Product',
     },
     createdAt: {
-        type: Date,
+        type: Date,   
         default: Date.now
     },
     updatedAt: {

@@ -25,7 +25,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           <div className="relative w-[200px] h-[200px]">
           
             <div className="absolute top-0 right-0 z-10">
-                <Button onClick={()=> onRemove(url)} size='sm' className="bg-red-600 text-white">
+                <Button type="button" onClick={()=> onRemove(url)} size='sm' className="bg-red-600 text-white">
                     <Trash className="h-4 w-4" />
                 </Button>
             </div>
@@ -35,7 +35,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               alt="category"
               className="object-cover rounded"
               fill
-            />
+            />  
           </div>
         ))}
       </div>

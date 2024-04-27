@@ -80,3 +80,12 @@ export const DELETE = async (
     return new NextResponse("DeleteCategory", { status: 500 });
   }
 };
+
+
+
+
+
+
+
+
+export const dynamic = "force-dynamic";
