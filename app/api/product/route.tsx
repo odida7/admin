@@ -52,6 +52,7 @@ export const POST = async (req: NextRequest) => {
     if (category) {
       for (const categoryId of category) {
         const categories = await Category.findById(categoryId);
+        
         if (categories) {
           categories.products?.push(newProduct._id);
           await categories.save();
@@ -63,7 +64,7 @@ export const POST = async (req: NextRequest) => {
     return new NextResponse(newProduct, { status: 200 });
   } catch (err: any) {
     console.log('err', err.message);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return new NextResponse(err.message, { status: 500 });
   }
 };
 

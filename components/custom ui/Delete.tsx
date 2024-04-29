@@ -15,28 +15,31 @@ import {
 import toast from "react-hot-toast";
 
 interface DeleteProps {
+  item: string;
   id: string;  
 }
 
-const Delete:React.FC<DeleteProps> = ({id}) => {
+const Delete:React.FC<DeleteProps> = ({id, item}) => {
 
   const [loading, setLoading] = useState(false);
 
   const onDelete = async ()=> {
     try{
       setLoading(true);
-      const res =  await fetch(`/api/category/${id}`, {
+      const itemType = item === 'product' ? 'products' : 'categories';
+      const res =  await fetch(`/api/${itemType}/${id}`, {
         method: 'DELETE',
       })
       
       if (res.ok){
-        window.location.href = ('/categories');
-        toast.success('Category deleted successfully')
+        window.location.href = (`/${itemType}`);
+        toast.success(`${item} deleted successfully`)
         setLoading(false);
       }
     
     }catch(err){
-      console.log('CategoryDelete', err)
+      console.log(`${item}`, err)
+      toast.error("Something went wrong! Please try again.")
     }
   }
 
@@ -51,8 +54,8 @@ const Delete:React.FC<DeleteProps> = ({id}) => {
         <AlertDialogHeader>
           <AlertDialogTitle className="text-red-500">Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            category.
+            This action cannot be undone. This will permanently delete your {' '}
+            {item}.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

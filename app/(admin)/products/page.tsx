@@ -17,7 +17,7 @@ const page = () => {
 
   const getProducts = async()=>{
     try{
-      const res = await fetch('/api/products');
+      const res = await fetch('/api/product');
       const data = await res.json();
       setProducts(data);
       setLoading(false);

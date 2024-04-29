@@ -116,7 +116,7 @@ const ItemForm = () => {
         <p className="text-4xl text-gray-600 font-semibold">
           Create New Product
         </p>
-        <Delete id="" />
+      {/*  <Delete id="" />*/}
       </div>
 
       <Separator className="mt-4 mb-7 bg-slate-500" />

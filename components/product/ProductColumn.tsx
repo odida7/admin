@@ -34,6 +34,6 @@ export const columns: ColumnDef<ProductType>[] = [
   },
   {
     id: "action",
-    cell: ({ row }) => <Delete id={row.original._id} />,
+    cell: ({ row }) => <Delete item="product" id={row.original._id} />,
   },
 ];
