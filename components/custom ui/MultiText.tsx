@@ -50,7 +50,7 @@ const MultiText: React.FC<MultiTextProps> = ({
               onClick={() => onRemove(item)}
               type="button"
             >
-              <X className="h-3 w-3" />
+              <X className="h-3 w-3 hover:text-red-500" />
             </button>
           </Badge>
         ))}

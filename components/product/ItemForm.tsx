@@ -58,26 +58,25 @@ const ItemForm = () => {
     },
   });
 
-
   ///////////Fetch Categories
 
   const getCategories = async () => {
-    try{
-      const res = await fetch("/api/categories", {
+    try {
+      const res = await fetch("/api/category", {
         method: "GET",
       });
       const data = await res.json();
+      console.log(data);
       setCategories(data);
       setLoading(false);
-    }catch(err: any){
-      console.log('[GetCategories_err]',err.message);
+    } catch (err: any) {
+      console.log("[GetCategories_err]", err.message);
       toast.error("Something went wrong");
     }
-   }
-   useEffect(() => {
-     getCategories();
-   }, []);
-
+  };
+  useEffect(() => {
+    getCategories();
+  }, []);
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -109,7 +108,9 @@ const ItemForm = () => {
     }
   };
 
-  return loading ? <Loader/> : (
+  return loading ? (
+    <Loader />
+  ) : (
     <div className="p-10">
       <div className="flex items-center justify-between">
         <p className="text-4xl text-gray-600 font-semibold">
@@ -267,9 +268,16 @@ const ItemForm = () => {
                   <FormControl>
                     <MultiSelect
                       placeholder="Category"
-                      category={categories}
                       value={field.value}
-                      
+                      categories={categories}
+                      onChange={(_id) => field.onChange([...field.value, _id])}
+                      onRemove={(idToRemove) =>
+                        field.onChange([
+                          ...field.value.filter(
+                            (collectionId) => collectionId !== idToRemove
+                          ),
+                        ])
+                      }
                     />
                   </FormControl>
                   <FormMessage className="text-red-1" />
