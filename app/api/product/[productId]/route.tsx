@@ -17,7 +17,7 @@ export const GET = async (
       path: "category",
       model: Category,
     });
-
+  
     if (!product) {
       return new NextResponse(
         JSON.stringify({ message: "Product not found" }),
@@ -76,7 +76,7 @@ export const POST = async (
     }
 
     const addedCategory = category.filter(
-      (categoryId: string) => !product.category.includes(categoryId)
+      (categoryId: string) => product.category.includes(categoryId)
     );
     // included in new data, but not included in the previous data
 
@@ -85,16 +85,16 @@ export const POST = async (
     );
     // included in previous data, but not included in the new data
 
-    // Update collections
+    // Update category
     await Promise.all([
-      // Update added collections with this product
+      // Update added category with this product
       ...addedCategory.map((categoryId: string) =>
         Category.findByIdAndUpdate(categoryId, {
           $push: { products: product._id },
         })
       ),
 
-      // Update removed collections without this product
+      // Update removed category without this product
       ...removedCategory.map((categoryId: string) =>
         Category.findByIdAndUpdate(categoryId, {
           $pull: { products: product._id },

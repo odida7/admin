@@ -37,14 +37,47 @@ const formSchema = z.object({
   expense: z.coerce.number().min(0.1),
 });
 
-const ItemForm = () => {
+
+interface ProductFormProps {
+  initialData?: ProductType | null;
+}
+
+
+const ItemForm:React.FC<ProductFormProps> = ({initialData}) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<CategoryType[]>([]);
+
+
+    ///////////Fetch Categories
+
+    const getCategories = async () => {
+      try {
+        const res = await fetch("/api/category", {
+          method: "GET",
+        });
+        const data = await res.json();
+        console.log(data);
+        setCategories(data);
+        setLoading(false);
+      } catch (err: any) {
+        console.log("[GetCategories_err]", err.message);
+        toast.error("Something went wrong");
+      }
+    };
+    useEffect(() => {
+      getCategories();
+    }, []);
+  
+
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialData ? {
+      ...initialData,
+      category: initialData.category.map((c)=>c._id),
+    } : {
       title: "",
       description: "",
       media: [],
@@ -58,36 +91,20 @@ const ItemForm = () => {
     },
   });
 
-  ///////////Fetch Categories
-
-  const getCategories = async () => {
-    try {
-      const res = await fetch("/api/category", {
-        method: "GET",
-      });
-      const data = await res.json();
-      console.log(data);
-      setCategories(data);
-      setLoading(false);
-    } catch (err: any) {
-      console.log("[GetCategories_err]", err.message);
-      toast.error("Something went wrong");
-    }
-  };
-  useEffect(() => {
-    getCategories();
-  }, []);
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const url = "/api/product";
+      const url = initialData 
+      ? `/api/product/${initialData._id}`
+      : '/api/product';
       const res = await fetch(url, {
         method: "POST",
         body: JSON.stringify(values),
       });
       if (res.ok) {
-        toast.success("Product added successfully");
+        setLoading(false);
+        toast.success(`Product ${initialData ? "updated" : "created"}`);
         window.location.href = "/products";
         router.push("/products");
       }
@@ -112,12 +129,20 @@ const ItemForm = () => {
     <Loader />
   ) : (
     <div className="p-10">
-      <div className="flex items-center justify-between">
-        <p className="text-4xl text-gray-600 font-semibold">
-          Create New Product
-        </p>
-      {/*  <Delete id="" />*/}
-      </div>
+      {initialData ? (
+        <div className="flex items-center justify-between">
+          <p className="text-4xl text-gray-600 font-semibold">
+            Edit Product
+          </p>
+          <Delete id={initialData?._id} item="product" />
+        </div>
+      )
+    : (
+      <h1 className="text-4xl text-gray-500 font-semibold">
+        Create Product
+      </h1>
+    )}
+      
 
       <Separator className="mt-4 mb-7 bg-slate-500" />
 

@@ -85,7 +85,7 @@ const CategoryForm: React.FC<CategoryProps> = ({ initialData }) => {
             Edit Category
           </h1>
 
-          <Delete id={initialData._id}/>
+          <Delete id={initialData._id} item="category"/>
         </div>
       ) : (
         <h1 className="text-4xl text-gray-500 font-semibold">
