@@ -5,6 +5,8 @@ import { DataTable } from "@/components/custom ui/DataTable";
 import Loader from "@/components/custom ui/Loader";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@clerk/nextjs";
+//import { getAuth } from "@clerk/nextjs/server";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -13,6 +15,13 @@ const page = () => {
   const [loading, setLoading] = useState(true);
   const [categories, SetCategories] = useState([]);
   const router = useRouter()
+  const {userId} = useAuth()
+  
+
+  if(!userId){
+    router.push('/sign-in')
+    return
+  }
 
   const fetchCategories = async () => {
     try {

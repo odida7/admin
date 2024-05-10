@@ -8,12 +8,19 @@ import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
+import { useAuth } from '@clerk/nextjs';
 
 const page = () => {
 
   const [loading, setLoading] =  useState(true);
   const [products, setProducts] = useState([]);
   const router = useRouter();
+  const {userId} = useAuth()
+
+  if(!userId){
+    router.push('/sign-in')
+    return
+  }
 
   const getProducts = async()=>{
     try{

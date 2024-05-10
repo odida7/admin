@@ -13,7 +13,7 @@ const Navbar = () => {
   const [dropDownMenu, setDropDownMenu] = useState(false);
 
   return (
-    <div className="sticky top-0 z-50 w-full flex flex-row justify-between items-center px-8 py-4 bg-blue-2 bg-white bg-opacity-95 shadow-md lg:hidden">
+    <div className="sticky top-0 z-50 w-full flex flex-row justify-between items-center px-8 py-4 bg-white bg-opacity-95 shadow-md lg:hidden">
       <Image src="/assets/images/logo.png" alt="logo" width={150} height={70} />
 
       <div className="flex items-center gap-4">
