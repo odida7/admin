@@ -77,9 +77,9 @@ export const GET = async (req: NextRequest) => {
       .sort({ createdAt: "desc" })
       .populate({ path: "category", model: Category });
     return NextResponse.json(products, { status: 200 });
-  } catch (err) {
+  } catch (err: any) {
     console.log(err);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return new NextResponse(err.message, { status: 500 });
   }
 };
 

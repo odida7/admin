@@ -76,7 +76,7 @@ export const POST = async (
     }
 
     const addedCategory = category.filter(
-      (categoryId: string) => product.category.includes(categoryId)
+      (categoryId: string) => !product.category.includes(categoryId)
     );
     // included in new data, but not included in the previous data
 
